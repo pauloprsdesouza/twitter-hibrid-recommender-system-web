@@ -19,68 +19,93 @@
         disponibilidade em participar deste experimento. Será uma satisfação te
         ter como voluntário, saiba que sua avaliação é muito importante.
       </p>
+      <div class="d-flex flex-row text-dark">
+        <div class="mr-3">
+          <a
+            href="https://twitter.com/pauloprsdesouza"
+            target="_blank"
+            class="text-primary"
+            ><i class="fab fa-twitter-square fa-2x"></i
+          ></a>
+        </div>
+        <div class="mr-3">
+          <a
+            href="http://paulorsouza.com.br"
+            target="_blank"
+            class="text-primary"
+            ><i class="fas fa-globe fa-2x"></i
+          ></a>
+        </div>
+        <div>
+          <a
+            href="https://github.com/pauloprsdesouza"
+            target="_blank"
+            class="text-primary"
+            ><i class="fab fa-github-square fa-2x"></i
+          ></a>
+        </div>
+      </div>
     </div>
     <div class="mb-4 card card-shadow p-4">
-      <h2>O Sistema</h2>
+      <h2>O que é o sistema</h2>
       <p class="text-justify lead">
         Este Sistema de Recomendação (RS) foi desenvolvido como proposta inicial
         e essencial para a condução e desenvolvimento do meu trabalho de
         Doutorado.
       </p>
-    </div>
-    <div class="mb-4 card card-shadow p-4">
-      <h2>Objetivo</h2>
       <p class="text-justify lead">
-        Este experimento visa avaliar a
-        <span class="text-primary"> qualidade </span> e a
-        <span class="text-primary"> relevância </span> das recomendações geradas
-        para você de acordo com os seus interesses.
+        Em muitos casos, encontrar o que queremos de forma simples e rápida de
+        acordo com nossos interesses/preferências torna-se uma tarefa cansativa.
+      </p>
+      <p class="text-justify lead">
+        Nas redes sociais por exemplo, somos alvos de muitas postagens que nem
+        sempre são apresentadas na ordem de relevância que gostaríamos. Logo,
+        precisamos procurar ou rolar uma página inteira até encontrar algo que
+        nos interesse.
       </p>
     </div>
     <div class="mb-4 card card-shadow p-4">
-      <h2>Vídeo Tutorial</h2>
+      <h2>Qual o seu objetivo</h2>
+      <p class="text-justify lead">
+        Este experimento visa recomendar notícias de acordo com seus
+        interesses/preferências a fim de avaliar a
+        <span class="text-primary"> qualidade </span> e a
+        <span class="text-primary"> relevância </span> que essas recomendações
+        geradas tiveram para você.
+      </p>
     </div>
     <div class="mb-4 card card-shadow p-4">
-      <h2>Dúvidas</h2>
+      <h2>Veja este vídeo tutorial</h2>
       <p class="text-justify lead">
-        Caso algo não tenha ficado claro ou até mesmo se estiver enfrentando
+        Este vídeo apresenta de forma bem simples e em poucos segundos a
+        utilização do sistema.
+      </p>
+      <div class="embed-responsive embed-responsive-16by9">
+        <iframe
+          class="embed-responsive-item"
+          width="560"
+          height="315"
+          src="https://www.youtube.com/embed/ktYsCZJYArU"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+    <div class="mb-4 card card-shadow p-4">
+      <h2>Caso tenha alguma dúvida</h2>
+      <p class="text-justify lead">
+        Ou se algo não tenha ficado claro e/ou até mesmo se estiver enfrentando
         algum problema com o experimento, por favor entre em contato comigo
         <a href="mailto:paulo.prsdesouza@gmail.com">
-          paulo.prsdesouza@gmail.com </a
-        >.
+          paulo.prsdesouza@gmail.com
+        </a>
       </p>
     </div>
     <div class="mb-5 mt-5 text-center">
-      <a
-        href="/recommendations-wizard"
-        class="btn btn-primary btn-lg button-width-widget"
-      >
-        😃 CLIQUE AQUI E VAMOS COMEÇAR!
+      <a href="/recommendations-wizard" class="btn btn-primary btn-lg btn-block"
+        ><span class="align-middle">😃 CLIQUE AQUI E VAMOS COMEÇAR!</span>
       </a>
-    </div>
-    <h2>Sobre mim</h2>
-    <div class="d-flex flex-row mb-5 text-dark">
-      <div class="mr-3">
-        <a
-          href="https://twitter.com/pauloprsdesouza"
-          target="_blank"
-          class="text-primary"
-          ><i class="fab fa-twitter-square fa-2x"></i
-        ></a>
-      </div>
-      <div class="mr-3">
-        <a href="http://paulorsouza.com.br" target="_blank" class="text-primary"
-          ><i class="fas fa-globe fa-2x"></i
-        ></a>
-      </div>
-      <div>
-        <a
-          href="https://github.com/pauloprsdesouza"
-          target="_blank"
-          class="text-primary"
-          ><i class="fab fa-github-square fa-2x"></i
-        ></a>
-      </div>
     </div>
   </div>
 </template>

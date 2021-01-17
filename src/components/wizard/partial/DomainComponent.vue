@@ -45,7 +45,6 @@ export default {
         }
       });
 
-      //this.$parent.clearSelectedEntity();
       this.getEntities();
     },
     getEntities() {

@@ -29,7 +29,6 @@
       <div ref="recaptchaElement"></div>
     </div>
     <div class="form-group">
-      {{ this.credential.tokenRecaptcha }}
       <button
         type="submit"
         class="btn btn-primary btn-block"
@@ -70,7 +69,7 @@ export default {
         .then((response) => response.json())
         .then((response) => {
           localStorage.setItem("token", response.token);
-          window.location.href = "/recommendations-wizard";
+          window.location.href = "/instructions";
         })
         .catch((response) => response.json())
         .then((message) => {
@@ -116,7 +115,6 @@ export default {
   },
   watch: {
     isRecaptchaValid(oldValue, newValue) {
-      console.info(newValue);
       this.isRecaptchaValid = newValue;
     },
   },

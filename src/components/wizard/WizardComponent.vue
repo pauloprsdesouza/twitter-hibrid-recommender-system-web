@@ -30,7 +30,7 @@
     <div
       id="selected-subject"
       v-if="tab.index == 0"
-      class="col p-4"
+      class="col p-4 card-shadow"
       style="background-color: #ffffff"
     >
       <domain-component
@@ -155,11 +155,16 @@
         <span> Finalizar </span>
       </button>
     </div>
-    <div v-if="tab.index == 5">
+
+    <div v-if="tab.index === 5">
       <div class="card card-shadow card-tweet-timeline">
         <div class="card-body text-center">
           <i class="fas fa-check text-success fa-3x mb-4"></i>
-          <h1 class="display-5 lead text-primary">Experimento Finalizado!!!</h1>
+          <h1 class="display-5 lead text-primary">
+            Experimento Finalizado<br />
+            <small class="text-muted"> Muito Obrigado! </small>
+          </h1>
+          <h1 class="display-5 lead text-primary"></h1>
         </div>
         <div class="card-footer text-right">
           <a href="/" class="btn btn-outline-secondary">Fechar</a>

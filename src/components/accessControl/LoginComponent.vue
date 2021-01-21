@@ -26,25 +26,81 @@
       />
     </div>
     <div class="form-group">
-      <div ref="recaptchaElement"></div>
+      <div id="testere" ref="recaptchaElement"></div>
     </div>
     <div class="form-group">
       <button
         type="submit"
         class="btn btn-primary btn-block"
-        v-on:click="validateReCaptcha()"
-        v-bind:disabled="loading || !credential.email"
+        v-on:click="login()"
+        v-bind:disabled="
+          loading || !credential.email || !credential.tokenRecaptcha
+        "
       >
         <span v-if="!loading"> Participar </span>
         <span v-if="loading">
-          <span
-            class="spinner-border spinner-border-sm"
-            role="status"
-            aria-hidden="true"
-          ></span>
           Autenticando...
+          <i class="fas fa-spinner fa-pulse"></i>
         </span>
       </button>
+    </div>
+    <div
+      class="modal fade"
+      id="similarUsersModal"
+      data-backdrop="static"
+      data-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">
+              Qual destes emails é seu?
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <table class="table">
+              <tr v-for="user in similarUsers" :key="user.id">
+                <td>
+                  {{ user.email }}
+                </td>
+                <td>
+                  <button
+                    class="btn btn-primary btn-sm"
+                    v-on:click="setLoggedUser(user)"
+                    v-bind:disabled="user.loading"
+                  >
+                    <span v-if="!user.loading">Este</span>
+                    <span v-if="user.loading">
+                      Carregando&nbsp;
+                      <i class="fas fa-spinner fa-pulse"></i>
+                    </span>
+                  </button>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Fechar
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -58,6 +114,7 @@ export default {
       loading: false,
       formChecked: false,
       recaptchaInstance: {},
+      similarUsers: [],
     };
   },
   methods: {
@@ -65,11 +122,21 @@ export default {
       this.loading = true;
 
       this.$http
-        .post(this.$APIUri("/users/signup"), this.credential)
+        .post(this.$APIUri("/users/login"), this.credential)
         .then((response) => response.json())
         .then((response) => {
-          localStorage.setItem("token", response.token);
-          window.location.href = "/instructions";
+          if (response.user) {
+            localStorage.setItem("token", response.user.token);
+
+            if (response.user.viewInstructions) {
+              window.location.href = "/recommendations-wizard";
+            } else {
+              window.location.href = "/instructions";
+            }
+          } else {
+            this.similarUsers = response.users;
+            $("#similarUsersModal").modal("show");
+          }
         })
         .catch((response) => response.json())
         .then((message) => {
@@ -77,6 +144,32 @@ export default {
         })
         .finally(() => {
           this.loading = false;
+        });
+    },
+    setLoggedUser(user) {
+      this.$set(user, "loading", true);
+      user.tokenRecaptcha = this.credential.tokenRecaptcha;
+
+      this.$http
+        .post(this.$APIUri("/users/update-token"), user)
+        .then((response) => response.json())
+        .then((response) => {
+          localStorage.setItem("token", this.credential.tokenRecaptcha);
+
+          $("#similarUsersModal").modal("hide");
+
+          if (response.user.viewInstructions) {
+            window.location.href = "/recommendations-wizard";
+          } else {
+            window.location.href = "/instructions";
+          }
+        })
+        .catch((response) => response.json())
+        .then((message) => {
+          this.message.error = message;
+        })
+        .finally(() => {
+          user.loading = false;
         });
     },
     validateReCaptcha() {
@@ -89,7 +182,7 @@ export default {
         }
 
         this.credential.tokenRecaptcha = response;
-        this.login();
+        //  this.login();
       }
     },
     checkForm() {
@@ -101,7 +194,7 @@ export default {
       );
 
       if (!isEmailValid) {
-        this.message.error = "Please inform a valid  mail!";
+        this.message.error = "Por favor, informe um email válido";
         return false;
       }
 
@@ -112,21 +205,24 @@ export default {
     closeMessage() {
       this.message = { infor: "", error: "" };
     },
-  },
-  watch: {
-    isRecaptchaValid(oldValue, newValue) {
-      this.isRecaptchaValid = newValue;
+    render() {
+      var recaptchaElement = this.$refs.recaptchaElement;
+      this.recaptchaInstance = grecaptcha.render(recaptchaElement, {
+        sitekey: "6LcaxygaAAAAAE2lvfVzMW4TqGWpm_7lSa5e5hCW",
+        callback: (response) => {
+          this.validateReCaptcha();
+        },
+      });
     },
   },
-  created() {
-    setTimeout(() => {
-      if (window.grecaptcha) {
-        var recaptchaElement = this.$refs.recaptchaElement;
-        this.recaptchaInstance = grecaptcha.render(recaptchaElement, {
-          sitekey: "6LcaxygaAAAAAE2lvfVzMW4TqGWpm_7lSa5e5hCW",
-        });
-      }
-    }, 500);
+  mounted() {
+    window.ReCaptchaLoaded = this.render;
+
+    var script = document.createElement("script");
+
+    script.src =
+      "https://www.google.com/recaptcha/api.js?onload=ReCaptchaLoaded&render=explicit";
+    document.head.appendChild(script);
   },
 };
 </script>

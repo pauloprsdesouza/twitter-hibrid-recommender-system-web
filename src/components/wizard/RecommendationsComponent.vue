@@ -7,6 +7,20 @@
       class="card card-shadow card-tweet-timeline"
     >
       <div class="card-body text-center">
+        <span
+          class="float-left text-muted mb-4"
+          v-if="recommendation.retweetedBy"
+          >Retuitado por
+
+          {{ recommendation.retweetedBy.name
+          }}<a
+            :href="
+              'https://twitter.com/' + recommendation.retweetedBy.screenName
+            "
+            target="_blank"
+            >&nbsp;@{{ recommendation.retweetedBy.screenName }}</a
+          ></span
+        >
         <div
           :id="'teste' + recommendation.idTweet"
           :tweetID="recommendation.idTweet"

@@ -73,6 +73,11 @@
         <span class="text-primary"> relevância </span> que essas recomendações
         geradas tiveram para você.
       </p>
+      <p class="text-justify lead">
+        Diante disso, você avaliará 4 listas contendo 10 notícias cada. Vale
+        ressaltar que você poderá participar do experimento quantas vezes
+        quiser, para isso, basta utilizar o seu email.
+      </p>
     </div>
     <div class="mb-4 card card-shadow p-4">
       <h2>Veja este vídeo tutorial</h2>
@@ -85,7 +90,7 @@
           class="embed-responsive-item"
           width="560"
           height="315"
-          src="https://www.youtube.com/embed/ktYsCZJYArU"
+          src="https://www.youtube.com/embed/BdpSjzixhbc"
           frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
@@ -103,17 +108,51 @@
       </p>
     </div>
     <div class="mb-5 mt-5 text-center">
-      <a href="/recommendations-wizard" class="btn btn-primary btn-lg btn-block"
-        ><span class="align-middle">😃 CLIQUE AQUI E VAMOS COMEÇAR!</span>
-      </a>
+      <button
+        class="btn btn-primary btn-lg btn-block"
+        v-on:click="updateViewInstructions()"
+        v-bind:disabled="isLoading"
+      >
+        <span v-if="!isLoading" class="align-middle"
+          >😃 CLIQUE AQUI E VAMOS COMEÇAR!</span
+        >
+        <span v-if="isLoading">
+          <span
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+          Carregando...
+        </span>
+      </button>
     </div>
   </div>
 </template>
 <script>
+import Vue from "vue";
+
 export default {
-  name: "about",
+  name: "instructions",
   data() {
-    return {};
+    return {
+      isLoading: false,
+    };
+  },
+  methods: {
+    updateViewInstructions() {
+      this.isLoading = true;
+
+      this.$http
+        .post(this.$APIUri("/users/view-instructions"))
+        .then((json) => {
+          window.location.href = "/recommendations-wizard";
+        })
+        .catch((response) => response.json())
+        .then((response) => {})
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
   },
 };
 </script>

@@ -1,23 +1,23 @@
 <template>
   <div>
-    <h3 class="text-center mb-5">
-      Por favor, antes de começar leia as
-      <a href="/instructions" class="btn btn-primary">INSTRUÇÕES</a>
-    </h3>
-    <div class="row">
-      <div class="col-lg-6 col-md-6 col-sm-12 m-auto">
-        <div class="card">
-          <div class="card-header">
-            <h5>Identificação do Participante</h5>
-          </div>
-          <div class="card-body">
-            <signup-component
-              v-if="isNewCredential"
-              :isNewCredential="isNewCredential"
-              :cancel="cancel"
-            ></signup-component>
-            <login-component v-if="!isNewCredential"></login-component>
-          </div>
+    <div
+      class="jumbotron jumbotron-fluid card-shadow card-tweet-timeline text-center"
+      style="background-color: #ffffff"
+    >
+      <div class="container">
+        <h1 class="display-4">Seja bem-vindo(a)</h1>
+        <p class="lead">
+          Este sistema é um experimento para o desenvolvimento do meu Doutorado
+          em Ciência da Computação. Para mais informações
+        </p>
+        <a href="/instructions" class="btn btn-outline-secondary">
+          Clique e Leia as Instruções
+        </a>
+        <hr class="my-4" />
+        <div class="text-center">
+          <span class="text-center lead display-7">Ou</span>
+          <p class="display-6">Informe seu email abaixo</p>
+          <login-component></login-component>
         </div>
       </div>
     </div>
@@ -29,17 +29,7 @@ import LoginComponent from "@/components/accessControl/LoginComponent.vue";
 export default {
   name: "LoginView",
   data() {
-    return {
-      isNewCredential: false,
-    };
-  },
-  methods: {
-    signup() {
-      this.isNewCredential = true;
-    },
-    cancel() {
-      this.isNewCredential = false;
-    },
+    return {};
   },
   components: { LoginComponent },
 };

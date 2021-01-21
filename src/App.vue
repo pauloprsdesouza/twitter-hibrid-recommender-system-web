@@ -22,7 +22,9 @@
             class="nav-item item-highlight"
             :class="{ active: isInstructions }"
           >
-            <a class="nav-link" href="/instructions">Instruções</a>
+            <a class="nav-link" href="/instructions" v-if="isLogged"
+              >Instruções</a
+            >
           </li>
         </ul>
         <ul class="navbar-nav my-2 my-lg-0" v-if="isLogged">
@@ -47,12 +49,6 @@
       </div>
     </nav>
     <div class="container mb-5">
-      <!-- <div class="d-flex mb-4 align-items-center" v-if="isLogged">
-        <h5 class="notranslate mr-2">
-          Caso precise traduzir os tweets, basta selecionar o idoma ao lado
-        </h5>
-        <div id="google_translate_element"></div>
-      </div> -->
       <router-view />
     </div>
   </div>
@@ -106,12 +102,6 @@ export default {
         });
     },
   },
-  watch: {
-    user: function (val) {
-      Vue.prototype.$activeUser = val;
-    },
-  },
-
   mounted() {
     var token = localStorage.getItem("token");
 

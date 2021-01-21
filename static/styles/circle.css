@@ -1,9 +1,9 @@
 .navbar {
-  background-color: #444f57 !important;
+  background-color: #363636 !important;
 }
 
 body {
-  background-color: #f2f2f2;
+  background-color: #faf8ff;
 }
 
 .btn-circle {
@@ -35,13 +35,6 @@ body {
 }
 
 @media only screen and (min-width: 800px) {
-  .vl {
-    border-left: 3px solid #6c757d;
-    height: 110px;
-    float: left;
-    margin-top: -110px;
-    margin-left: 34px;
-  }
 
   .card-tweet-timeline {
     width: 50%;
@@ -61,13 +54,6 @@ body {
 }
 
 @media only screen and (max-width: 768px) {
-  .vl {
-    border-left: 3px solid #6c757d;
-    height: 250px;
-    float: left;
-    margin-top: -250px;
-    margin-left: 34px;
-  }
 
   .card-tweet-timeline {
     width: 100%;
@@ -148,7 +134,7 @@ body {
 }
 
 .card-footer-dark-gray {
-  background-color: #363636;
+  background-color: #4d4f54;
   color: #FFFFFF
 }
 
@@ -169,10 +155,19 @@ body {
   font-size: 20pt !important;
 }
 
+.display-7 {
+  font-size: 16pt !important;
+}
+
+
 .nav-item.item-highlight {
   background-color: #0073e6;
 }
 
 .item-highlight>a {
   color: #FFFFFF !important;
+}
+
+.jumbotron {
+  padding: 10px !important;
 }

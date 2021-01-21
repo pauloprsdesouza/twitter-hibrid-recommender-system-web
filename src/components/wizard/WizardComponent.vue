@@ -47,7 +47,7 @@
         <h1 class="display-5 lead text-muted">Você selecionou</h1>
         <p>
           <button
-            class="btn btn-secondary mr-2"
+            class="btn btn-secondary mr-2 mb-2"
             v-for="entity in selectedEntities"
             :key="entity.id"
             v-on:click="removeSelectedEntity(entity)"
@@ -87,7 +87,7 @@
       </div>
     </div>
     <div v-if="tab.index > 0 && tab.index < 5">
-      <blockquote class="blockquote mb-4 mt-4 display-6 lead text-muted">
+      <blockquote class="blockquote mb-4 mt-4 display-7 lead text-muted">
         Avalie essas recomendações que foram geradas para esses três assuntos
         <span
           v-for="entity in selectedEntities"
@@ -151,8 +151,13 @@
         v-if="tab.index == 4"
         class="btn btn-primary btn-block button-width-widget"
         v-on:click="acknowledgments()"
+        v-bind:disabled="!recommendationsEvaluated"
       >
-        <span> Finalizar </span>
+        <span v-if="!isLoading">Finalizar</span>
+        <span v-if="isLoading">
+          Carregando&nbsp;
+          <i class="fas fa-spinner fa-pulse"></i>
+        </span>
       </button>
     </div>
 
@@ -167,7 +172,17 @@
           <h1 class="display-5 lead text-primary"></h1>
         </div>
         <div class="card-footer text-right">
-          <a href="/" class="btn btn-outline-secondary">Fechar</a>
+          <button
+            class="btn btn-outline-secondary"
+            v-on:click="finishExperiment()"
+            v-bind:disabled="isLoading"
+          >
+            <span v-if="!isLoading">Fechar e Salvar</span>
+            <span v-if="isLoading">
+              Estamos salvando...&nbsp;
+              <i class="fas fa-spinner fa-pulse"></i>
+            </span>
+          </button>
           <button class="btn btn-primary" v-on:click="newParticipation()">
             Participar de novo
           </button>
@@ -283,7 +298,7 @@ export default {
           this.message.error = response;
         })
         .finally(() => {
-          this.isLoading = false;
+          this.isLoading = true;
         });
     },
     getRecommendations(type) {
@@ -338,14 +353,19 @@ export default {
       window.scrollTo(0, 0);
     },
     finishExperiment() {
+      this.isLoading = true;
+
       this.$http
-        .get(this.$APIUri("/users/finish-experiment"))
+        .post(this.$APIUri("/recommendations/finished-evaluations"))
         .then((response) => {
           window.location.href = "/";
         })
         .catch((response) => response.json())
         .then((response) => {
           this.message.error = response;
+        })
+        .finally(() => {
+          this.isLoading = false;
         });
     },
     getURLRecommendations() {

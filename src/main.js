@@ -11,9 +11,9 @@ Vue.use(VueResource)
 
 Vue.prototype.$APIUri = function (path) {
   //return 'http://nbcgib.uesc.br/rectwitter' + path;
-  //return 'http://localhost:8080' + path;
+  return 'http://localhost:8080' + path;
   //return 'http://localhost:8082/twitter-app' + path;
- return 'https://www.experimentalapp.com.br:8081/twitter-app' + path;
+ //return 'https://www.experimentalapp.com.br:8081/twitter-app' + path;
 }
 
 Vue.http.interceptors.push((request, response) => {

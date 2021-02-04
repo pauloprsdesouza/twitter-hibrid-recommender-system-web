@@ -2,11 +2,18 @@
   <div>
     <div class="mb-4">
       <blockquote class="blockquote">
-        <p class="mb-4 display-5 lead text-muted">
-          Selecione até três categorias de seu interesse para gerarmos
-          recomendações
+        <p class="mb-1 display-6 lead text-muted">
+          Selecione <span class="text-primary">três</span> categorias de seu
+          interesse para gerarmos recomendações
+        </p>
+        <p class="mb-4 display-8 lead text-primary">
+          Vamos lá criar seu perfil
         </p>
       </blockquote>
+      <hr class="my-4" />
+      <p class="display-7 lead text-muted">
+        Selecione os assuntos de seu interesse
+      </p>
       <button
         v-for="domain in domains"
         :key="domain.id"
@@ -14,6 +21,7 @@
         v-bind:disabled="domain.disabled"
         class="btn m-1"
         :class="{
+          'btn-sm': domain.teste,
           'btn-primary': domain.selected,
           'btn-outline-primary': !domain.selected,
         }"

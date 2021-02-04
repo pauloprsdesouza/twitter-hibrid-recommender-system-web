@@ -49,7 +49,7 @@
           <button
             class="btn btn-secondary mr-2 mb-2"
             v-for="entity in selectedEntities"
-            :key="entity.id"
+            :key="entity.id.idEntity"
             v-on:click="removeSelectedEntity(entity)"
           >
             {{ entity.name }}&nbsp;
@@ -65,7 +65,7 @@
           acordo com seus interesses
           <span
             v-for="entity in selectedEntities"
-            :key="entity.id"
+            :key="entity.id.idEntity"
             class="badge badge-primary mr-2"
           >
             {{ entity.name }}
@@ -91,7 +91,7 @@
         Avalie essas recomendações que foram geradas para esses três assuntos
         <span
           v-for="entity in selectedEntities"
-          :key="entity.id"
+          :key="entity.id.idEntity"
           class="badge badge-primary mr-2"
         >
           {{ entity.name }}
@@ -219,9 +219,23 @@ export default {
   },
   methods: {
     newParticipation() {
-      this.recommendations = [];
-      (this.selectedEntities = []), (this.entitiesByDomain = []);
-      this.tab.index = 0;
+      this.isLoading = true;
+
+      this.$http
+        .post(this.$APIUri("/recommendations/finished-evaluations"))
+        .then((response) => {
+          this.recommendations = [];
+          this.selectedEntities = [];
+          this.entitiesByDomain = [];
+          this.tab.index = 0;
+        })
+        .catch((response) => response.json())
+        .then((response) => {
+          this.message.error = response;
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
 
       this.getAllDomains();
     },
@@ -277,25 +291,21 @@ export default {
 
       this.recommendations = [];
 
-      var params = this.getURLRecommendations();
+      var recommendationType = this.getURLRecommendations();
 
       var idsEntities = [];
 
       this.selectedEntities.forEach((entity, index) => {
-        idsEntities.push(entity.id);
+        idsEntities.push(entity.id.idEntity);
       });
 
       this.$http
-        .post(this.$APIUri(params.url), {
+        .post(this.$APIUri("/recommendations/generate-recommendations"), {
           idsEntities: idsEntities,
+          recommendationType: recommendationType,
         })
-        .then((response) => response.json())
-        .then((message) => {
-          this.getRecommendations(params.type);
-        })
-        .catch((response) => response.json())
-        .then((response) => {
-          this.message.error = response;
+        .then(() => {
+          this.getRecommendations(recommendationType);
         })
         .finally(() => {
           this.isLoading = true;
@@ -369,30 +379,15 @@ export default {
         });
     },
     getURLRecommendations() {
-      var recommendationParam = {};
-
       switch (this.tab.index) {
         case 1:
-          return {
-            url: "/recommendations/generate-social-capital",
-            type: "SC",
-          };
-          break;
+          return "SC";
         case 2:
-          return {
-            url: "/recommendations/generate-social-capital-sa",
-            type: "SCSA",
-          };
-          break;
+          return "SCSA";
         case 3:
-          return {
-            url: "/recommendations/generate-cosine-similarity",
-            type: "CS",
-          };
-          break;
+          return "CS";
         case 4:
-          return { url: "/recommendations/generate-baseline-a", type: "B1" };
-          break;
+          return "B1";
       }
     },
     getAllDomains() {
@@ -401,8 +396,8 @@ export default {
       this.$http
         .get(this.$APIUri("/domains/all"))
         .then((response) => response.json())
-        .then((json) => {
-          this.domains = json.domains;
+        .then((domains) => {
+          this.domains = domains;
         })
         .catch((response) => response.json())
         .then((response) => {

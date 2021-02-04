@@ -5,13 +5,13 @@
       style="background-color: #ffffff"
     >
       <div class="container">
-        <h1 class="display-4">Seja bem-vindo(a)</h1>
+        <h1 class="display-4">Bem-vindo(a)</h1>
         <p class="lead">
           Este sistema é um experimento para o desenvolvimento do meu Doutorado
           em Ciência da Computação. Para mais informações
         </p>
         <a href="/instructions" class="btn btn-outline-secondary">
-          Clique e Leia as Instruções
+          Leia as Instruções
         </a>
         <hr class="my-4" />
         <div class="text-center">

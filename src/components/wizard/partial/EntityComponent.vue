@@ -1,14 +1,17 @@
 <template>
   <div>
     <div class="mb-4">
+      <blockquote class="blockquote" v-if="entities.length > 0">
+        <p class="display-7 lead text-muted">E agora as categorias</p>
+      </blockquote>
       <button
         v-for="entity in entities"
-        :key="entity.id"
+        :key="entity.id.idEntity"
         v-on:click="selectEntity(entity)"
         class="btn m-1"
         :class="{
-          'btn-primary': entity.selected,
-          'btn-outline-primary': !entity.selected,
+          'btn-secondary': entity.selected,
+          'btn-outline-secondary': !entity.selected,
         }"
       >
         {{ entity.name }}

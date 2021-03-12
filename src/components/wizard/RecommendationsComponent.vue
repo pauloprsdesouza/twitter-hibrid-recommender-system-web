@@ -60,6 +60,7 @@ export default {
   name: "RecommendationComponent",
   props: {
     recommendations: Array,
+    teste: 0,
   },
   data() {
     return {
@@ -108,8 +109,6 @@ export default {
         });
     },
     createTweets() {
-      var index = 0;
-
       this.$nextTick(() => {
         this.recommendations.forEach((recommendation, index) => {
           var tweet = document.getElementById("teste" + recommendation.idTweet);
@@ -119,9 +118,10 @@ export default {
           });
         });
       });
-
-      twttr.widgets.load(this.$refs.twitterWjs);
     },
+  },
+  mounted() {
+    twttr.widgets.load(this.$refs.twitterWjs);
   },
 };
 </script>

@@ -171,3 +171,11 @@ body {
 .jumbotron {
   padding: 10px !important;
 }
+
+.twitter-visibility-hidden {
+  visibility: hidden;
+}
+
+.twitter-visibility-visible {
+  visibility: visible;
+}

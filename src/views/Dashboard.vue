@@ -163,8 +163,6 @@ export default {
           this.datasetsMRR.push(json.mrr);
           this.datasetsPrecision = json.precision;
           this.dataSummary = json.dataSummary;
-
-          console.info(json.map);
         })
         .catch((response) => response.json())
         .then((response) => {})

@@ -82,8 +82,8 @@ export default {
       this.$http
         .get(this.$APIUri("/users/details"))
         .then((response) => response.json())
-        .then((response) => {
-          this.user = response.user;
+        .then((user) => {
+          this.user = user;
         })
         .catch((response) => response.json())
         .then((response) => {
@@ -105,7 +105,11 @@ export default {
   mounted() {
     var token = localStorage.getItem("token");
 
-    if (token != null && window.location.pathname != "/") {
+    if (
+      token != null &&
+      window.location.pathname != "/" &&
+      window.location.pathname != "/dashboard"
+    ) {
       this.getActiveUser();
       this.isLogged = true;
     }

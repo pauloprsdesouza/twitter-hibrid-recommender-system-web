@@ -49,7 +49,7 @@
           <button
             class="btn btn-secondary mr-2 mb-2"
             v-for="entity in selectedEntities"
-            :key="entity.id.idEntity"
+            :key="entity.id"
             v-on:click="removeSelectedEntity(entity)"
           >
             {{ entity.name }}&nbsp;
@@ -65,7 +65,7 @@
           acordo com seus interesses
           <span
             v-for="entity in selectedEntities"
-            :key="entity.id.idEntity"
+            :key="entity.id"
             class="badge badge-primary mr-2"
           >
             {{ entity.name }}
@@ -91,7 +91,7 @@
         Avalie essas recomendações que foram geradas para esses três assuntos
         <span
           v-for="entity in selectedEntities"
-          :key="entity.id.idEntity"
+          :key="entity.id"
           class="badge badge-primary mr-2"
         >
           {{ entity.name }}
@@ -112,18 +112,15 @@
           Nenhuma recomendação foi gerada para esta lista
         </div>
       </div>
-      <div v-if="tab.index > 0 && tab.index < 5">
-        <recommendations-component
-          :recommendations="recommendations"
-        ></recommendations-component>
-      </div>
       <div
         class="card card-shadow card-tweet-timeline"
         v-if="tab.index > 0 && tab.index < 5 && isLoading"
       >
         <div class="card-body text-center">
           <div>
-            <span style="font-weight: 700">Estamos processando...</span>
+            <span style="font-weight: 700"
+              >Estamos processando <i class="fas fa-spinner fa-pulse"></i
+            ></span>
           </div>
           <div>
             <span style="font-weight: 400"
@@ -135,7 +132,22 @@
           </div>
         </div>
       </div>
+      <div
+        v-if="tab.index > 0 && tab.index < 5"
+        v-bind:class="{
+          'twitter-visibility-visible': isRendered,
+          'twitter-visibility-hidden': !isRendered,
+        }"
+      >
+        <recommendations-component
+          :recommendations="recommendations"
+        ></recommendations-component>
+      </div>
       <button
+        v-bind:class="{
+          'twitter-visibility-visible': !isLoading,
+          'twitter-visibility-hidden': isLoading,
+        }"
         v-if="tab.index > 0 && tab.index < 4"
         class="btn btn-primary btn-block button-width-widget"
         v-on:click="generateRecommendations()"
@@ -195,11 +207,14 @@
 import RecommendationsComponent from "@/components/wizard/RecommendationsComponent.vue";
 import DomainComponent from "@/components/wizard/partial/DomainComponent.vue";
 import EntityComponent from "@/components/wizard/partial/EntityComponent.vue";
+import Vue from "vue";
 
 export default {
   name: "WizardComponent",
   data() {
     return {
+      heightTwitter: 0,
+      isRendered: false,
       recommendations: [],
       recommendationsEvaluated: false,
       isLoading: false,
@@ -222,8 +237,8 @@ export default {
       this.isLoading = true;
 
       this.$http
-        .post(this.$APIUri("/recommendations/finished-evaluations"))
-        .then((response) => {
+        .get(this.$APIUri("/recommendations/finished-evaluations"))
+        .then(() => {
           this.recommendations = [];
           this.selectedEntities = [];
           this.entitiesByDomain = [];
@@ -284,6 +299,7 @@ export default {
       }
     },
     generateRecommendations() {
+      this.isRendered = false;
       this.isLoading = true;
       this.tab.index++;
 
@@ -296,31 +312,17 @@ export default {
       var idsEntities = [];
 
       this.selectedEntities.forEach((entity, index) => {
-        idsEntities.push(entity.id.idEntity);
+        idsEntities.push(entity.id);
       });
 
       this.$http
-        .post(this.$APIUri("/recommendations/generate-recommendations"), {
+        .post(this.$APIUri("/recommendations/bytype"), {
           idsEntities: idsEntities,
           recommendationType: recommendationType,
         })
-        .then(() => {
-          this.getRecommendations(recommendationType);
-        })
-        .finally(() => {
-          this.isLoading = true;
-        });
-    },
-    getRecommendations(type) {
-      this.isLoading = true;
-
-      this.$http
-        .post(this.$APIUri("/recommendations/not-evaluated"), {
-          recommendationType: type,
-        })
         .then((response) => response.json())
-        .then((json) => {
-          this.recommendations = json.recommendations;
+        .then((recommendationsJson) => {
+          this.recommendations = recommendationsJson;
 
           if (this.recommendations.length === 0 && this.tab.index < 5) {
             this.recommendationsEvaluated = true;
@@ -355,9 +357,17 @@ export default {
           this.message.error = response;
         })
         .finally(() => {
-          this.isLoading = false;
           this.scrollToTop();
         });
+
+      var that = this;
+      twttr.events.bind("rendered", function (event) {
+        that.isRendered = true;
+        that.isLoading = false;
+      });
+    },
+    setIsLoading(value) {
+      this.isLoading = value;
     },
     scrollToTop() {
       window.scrollTo(0, 0);
@@ -366,8 +376,8 @@ export default {
       this.isLoading = true;
 
       this.$http
-        .post(this.$APIUri("/recommendations/finished-evaluations"))
-        .then((response) => {
+        .get(this.$APIUri("/recommendations/finished-evaluations"))
+        .then(() => {
           window.location.href = "/";
         })
         .catch((response) => response.json())
@@ -406,6 +416,11 @@ export default {
         .finally(() => {
           this.isLoading = false;
         });
+    },
+  },
+  watch: {
+    "window.isRendered": (data) => {
+      console.info(data);
     },
   },
   mounted() {

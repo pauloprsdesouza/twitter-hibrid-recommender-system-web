@@ -20,7 +20,7 @@
         type="email"
         class="form-control input-ui"
         placeholder="Email"
-        v-model="credential.email"
+        v-model="credential.username"
         v-on:blur="checkForm()"
         required
       />
@@ -33,9 +33,7 @@
         type="submit"
         class="btn btn-primary btn-block"
         v-on:click="login()"
-        v-bind:disabled="
-          loading || !credential.email || !credential.tokenRecaptcha
-        "
+        v-bind:disabled="loading || !credential.username || !tokenRecaptcha"
       >
         <span v-if="!loading"> Participar </span>
         <span v-if="loading">
@@ -72,7 +70,7 @@
             <table class="table">
               <tr v-for="user in similarUsers" :key="user.id">
                 <td>
-                  {{ user.email }}
+                  {{ user.username }}
                 </td>
                 <td>
                   <button
@@ -109,12 +107,13 @@ export default {
   name: "LoginComponent",
   data() {
     return {
-      credential: { email: "", tokenRecaptcha: "" },
+      credential: { username: "" },
       message: { error: "", info: "" },
       loading: false,
       formChecked: false,
       recaptchaInstance: {},
       similarUsers: [],
+      tokenRecaptcha: "",
     };
   },
   methods: {
@@ -125,10 +124,10 @@ export default {
         .post(this.$APIUri("/users/login"), this.credential)
         .then((response) => response.json())
         .then((response) => {
-          if (response.user) {
-            localStorage.setItem("token", response.user.token);
+          if (response) {
+            localStorage.setItem("token", response.token);
 
-            if (response.user.viewInstructions) {
+            if (response.viewInstructions) {
               window.location.href = "/recommendations-wizard";
             } else {
               window.location.href = "/instructions";
@@ -146,32 +145,6 @@ export default {
           this.loading = false;
         });
     },
-    setLoggedUser(user) {
-      this.$set(user, "loading", true);
-      user.tokenRecaptcha = this.credential.tokenRecaptcha;
-
-      this.$http
-        .post(this.$APIUri("/users/update-token"), user)
-        .then((response) => response.json())
-        .then((response) => {
-          localStorage.setItem("token", this.credential.tokenRecaptcha);
-
-          $("#similarUsersModal").modal("hide");
-
-          if (response.user.viewInstructions) {
-            window.location.href = "/recommendations-wizard";
-          } else {
-            window.location.href = "/instructions";
-          }
-        })
-        .catch((response) => response.json())
-        .then((message) => {
-          this.message.error = message;
-        })
-        .finally(() => {
-          user.loading = false;
-        });
-    },
     validateReCaptcha() {
       if (grecaptcha) {
         var response = grecaptcha.getResponse(this.recaptchaInstance);
@@ -181,8 +154,7 @@ export default {
           return;
         }
 
-        this.credential.tokenRecaptcha = response;
-        //  this.login();
+        this.tokenRecaptcha = response;
       }
     },
     checkForm() {
@@ -190,7 +162,7 @@ export default {
 
       const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       var isEmailValid = emailRegex.test(
-        String(this.credential.email).toLowerCase()
+        String(this.credential.username).toLowerCase()
       );
 
       if (!isEmailValid) {

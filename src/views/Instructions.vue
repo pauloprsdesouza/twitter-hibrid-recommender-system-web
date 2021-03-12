@@ -143,7 +143,7 @@ export default {
       this.isLoading = true;
 
       this.$http
-        .post(this.$APIUri("/users/view-instructions"))
+        .get(this.$APIUri("/users/view-instructions"))
         .then((json) => {
           window.location.href = "/recommendations-wizard";
         })

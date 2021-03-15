@@ -107,22 +107,17 @@
         </a>
       </p>
     </div>
-    <div class="mb-5 mt-5 text-center">
+    <div class="mb-5 mt-5 text-center" v-if="userLogged">
       <button
         class="btn btn-primary btn-lg btn-block"
         v-on:click="updateViewInstructions()"
         v-bind:disabled="isLoading"
       >
         <span v-if="!isLoading" class="align-middle"
-          >😃 CLIQUE AQUI E VAMOS COMEÇAR!</span
-        >
+          >CLIQUE AQUI E VAMOS COMEÇAR!
+        </span>
         <span v-if="isLoading">
-          <span
-            class="spinner-border spinner-border-sm"
-            role="status"
-            aria-hidden="true"
-          ></span>
-          Carregando...
+          Carregando <i class="fas fa-spinner fa-pulse"></i>
         </span>
       </button>
     </div>
@@ -135,6 +130,7 @@ export default {
   name: "instructions",
   data() {
     return {
+      userLogged: false,
       isLoading: false,
     };
   },
@@ -153,6 +149,9 @@ export default {
           this.isLoading = false;
         });
     },
+  },
+  mounted() {
+    this.userLogged = localStorage.getItem("user-logged");
   },
 };
 </script>

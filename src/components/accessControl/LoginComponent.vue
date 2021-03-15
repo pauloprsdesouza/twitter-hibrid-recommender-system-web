@@ -126,6 +126,7 @@ export default {
         .then((response) => {
           if (response) {
             localStorage.setItem("token", response.token);
+            localStorage.setItem("user-logged", true);
 
             if (response.viewInstructions) {
               window.location.href = "/recommendations-wizard";

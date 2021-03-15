@@ -84,6 +84,7 @@ export default {
         .then((response) => response.json())
         .then((user) => {
           this.user = user;
+          localStorage.setItem("user-logged", true);
         })
         .catch((response) => response.json())
         .then((response) => {
@@ -98,6 +99,7 @@ export default {
           window.location.href = "/";
         })
         .finally(() => {
+          localStorage.removeItem("user-logged");
           localStorage.removeItem("token");
         });
     },

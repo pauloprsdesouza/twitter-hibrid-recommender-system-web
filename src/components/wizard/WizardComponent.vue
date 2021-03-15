@@ -184,20 +184,27 @@
           <h1 class="display-5 lead text-primary"></h1>
         </div>
         <div class="card-footer text-right">
-          <button
-            class="btn btn-outline-secondary"
-            v-on:click="finishExperiment()"
-            v-bind:disabled="isLoading"
-          >
-            <span v-if="!isLoading">Fechar e Salvar</span>
-            <span v-if="isLoading">
-              Estamos salvando...&nbsp;
-              <i class="fas fa-spinner fa-pulse"></i>
-            </span>
-          </button>
-          <button class="btn btn-primary" v-on:click="newParticipation()">
-            Participar de novo
-          </button>
+          <div class="col-sm-12 col-md-6 mb-2 float-md-left">
+            <button
+              class="btn btn-outline-secondary btn-block"
+              v-on:click="finishExperiment()"
+              v-bind:disabled="isLoading"
+            >
+              <span v-if="!isLoading">Fechar e Salvar</span>
+              <span v-if="isLoading">
+                Estamos salvando...&nbsp;
+                <i class="fas fa-spinner fa-pulse"></i>
+              </span>
+            </button>
+          </div>
+          <div class="col-sm-12 col-md-6 float-md-right">
+            <button
+              class="btn btn-primary btn-block"
+              v-on:click="newParticipation()"
+            >
+              Participar de novo
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -324,10 +331,6 @@ export default {
         .then((recommendationsJson) => {
           this.recommendations = recommendationsJson;
 
-          if (this.recommendations.length === 0 && this.tab.index < 5) {
-            this.recommendationsEvaluated = true;
-          }
-
           this.recommendations.forEach((recommendation, id) => {
             this.$set(recommendation, "updatingRating", false);
 
@@ -357,6 +360,11 @@ export default {
           this.message.error = response;
         })
         .finally(() => {
+          if (this.recommendations.length === 0 && this.tab.index < 5) {
+            this.recommendationsEvaluated = true;
+            that.isLoading = false;
+          }
+
           this.scrollToTop();
         });
 

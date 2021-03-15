@@ -162,12 +162,12 @@
       <button
         v-if="tab.index == 4"
         class="btn btn-primary btn-block button-width-widget"
-        v-on:click="acknowledgments()"
-        v-bind:disabled="!recommendationsEvaluated"
+        v-on:click="finishExperiment()"
+        v-bind:disabled="!recommendationsEvaluated || isLoading"
       >
         <span v-if="!isLoading">Finalizar</span>
         <span v-if="isLoading">
-          Carregando&nbsp;
+          Salvando&nbsp;
           <i class="fas fa-spinner fa-pulse"></i>
         </span>
       </button>
@@ -185,17 +185,7 @@
         </div>
         <div class="card-footer text-right">
           <div class="col-sm-12 col-md-6 mb-2 float-md-left">
-            <button
-              class="btn btn-outline-secondary btn-block"
-              v-on:click="finishExperiment()"
-              v-bind:disabled="isLoading"
-            >
-              <span v-if="!isLoading">Fechar e Salvar</span>
-              <span v-if="isLoading">
-                Estamos salvando...&nbsp;
-                <i class="fas fa-spinner fa-pulse"></i>
-              </span>
-            </button>
+            <a href="/" class="btn btn-outline-secondary btn-block"> Fechar </a>
           </div>
           <div class="col-sm-12 col-md-6 float-md-right">
             <button
@@ -260,9 +250,6 @@ export default {
         });
 
       this.getAllDomains();
-    },
-    acknowledgments() {
-      this.tab.index++;
     },
     getEntitiesByDomain(domain) {
       this.entitiesByDomain = domain.entities;
@@ -386,7 +373,7 @@ export default {
       this.$http
         .get(this.$APIUri("/recommendations/finished-evaluations"))
         .then(() => {
-          window.location.href = "/";
+          this.tab.index++;
         })
         .catch((response) => response.json())
         .then((response) => {

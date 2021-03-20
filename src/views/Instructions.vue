@@ -74,9 +74,16 @@
         geradas tiveram para você.
       </p>
       <p class="text-justify lead">
-        Diante disso, você avaliará 4 listas contendo 10 notícias cada. Vale
+        As recomendações serão geradas e relacionadas a partir de categorias que
+        você irá selecionar como gênero musical, entretenimento, esportes, etc.
+        Vale lembrar, que você precisa avaliar essas recomendações de acordo com
+        o que você selecionou e gostaria de receber HOJE, por exemplo.
+      </p>
+      <p class="text-justify lead">
+        Diante disso, 4 listas serão geradas contendo 10 notícias cada. Vale
         ressaltar que você poderá participar do experimento quantas vezes
-        quiser, para isso, basta utilizar o seu email.
+        quiser, para isso, basta utilizar o seu email cadastrado na tela de
+        acesso.
       </p>
     </div>
     <div class="mb-4 card card-shadow p-4">

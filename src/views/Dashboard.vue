@@ -157,10 +157,10 @@ export default {
         .then((json) => {
           this.datasetsByRating = json.resultsByRatings;
           this.labels = json.labels;
-          this.datasetsNDCG.push(json.ndcg);
           this.datasetsSPS.push(json.sps);
           this.datasetsMAP.push(json.map);
           this.datasetsMRR.push(json.mrr);
+          this.datasetsNDCG.push(json.ndcg);
           this.datasetsPrecision = json.precision;
           this.dataSummary = json.dataSummary;
         })

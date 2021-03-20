@@ -62,7 +62,7 @@
         <h1 class="display-5 lead text-muted">Pronto!</h1>
         <p>
           Agora vamos avaliar 4 listas de notícias que serão recomendadas de
-          acordo com seus interesses
+          acordo com seus interesses a partir dos tópicos selecionados
           <span
             v-for="entity in selectedEntities"
             :key="entity.id"

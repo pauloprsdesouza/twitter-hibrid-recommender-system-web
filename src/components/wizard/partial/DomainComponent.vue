@@ -12,7 +12,7 @@
       </blockquote>
       <hr class="my-4" />
       <p class="display-7 lead text-muted">
-        Selecione os assuntos de seu interesse
+        Selecione os assuntos de seu interesse e que você gostaria de receber recomendações HOJE
       </p>
       <button
         v-for="domain in domains"
